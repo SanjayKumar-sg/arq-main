@@ -1,19 +1,14 @@
 from rest_framework import serializers
-from .models import Events, Executive, TeamMember, GalleryEvent, GalleryImage, SuccessStory, UpcomingEvent
+from .models import Events, Member, GalleryEvent, GalleryImage, SuccessStory, UpcomingEvent
 
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Events
         fields = '__all__'
 
-class ExecutiveSerializer(serializers.ModelSerializer):
+class MemberSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Executive
-        fields = '__all__'
-
-class TeamMemberSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TeamMember
+        model = Member
         fields = '__all__'
 
 class GalleryImageSerializer(serializers.ModelSerializer):

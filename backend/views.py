@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Events, Executive, TeamMember, GalleryEvent, SuccessStory, UpcomingEvent
-from .serializers import EventsSerializer, ExecutiveSerializer, TeamMemberSerializer, GalleryEventSerializer, SuccessStorySerializer, UpcomingEventSerializer
+from .models import Events, Member, GalleryEvent, SuccessStory, UpcomingEvent
+from .serializers import EventsSerializer, MemberSerializer, GalleryEventSerializer, SuccessStorySerializer, UpcomingEventSerializer
 
 
 @api_view(['GET'])
@@ -13,11 +13,11 @@ def get_events(request):
 
 @api_view(['GET'])
 def get_team(request):
-    executives = Executive.objects.all().order_by('order')
-    members = TeamMember.objects.all()
+    executives = Member.objects.filter(category='executive').order_by('order')
+    members = Member.objects.filter(category='teammember').order_by('order')
     
-    exec_serializer = ExecutiveSerializer(executives, many=True)
-    member_serializer = TeamMemberSerializer(members, many=True)
+    exec_serializer = MemberSerializer(executives, many=True)
+    member_serializer = MemberSerializer(members, many=True)
     
     return Response({
         "executives": exec_serializer.data,

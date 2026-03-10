@@ -29,25 +29,12 @@ class Events(models.Model):
         return self.title
 
 
-class Executive(models.Model):
-    Position_CHOICES = [
-        ('president', 'President'),
-        ('vice-president', 'Vice-President'),
-        ('secretary', 'Secretary'),
-        ('ceo', 'CEO'),
-        ('hr', 'HR'),
+class Member(models.Model):
+    CATEGORY_CHOICES = [
+        ('executive', 'Executive'),
+        ('teammember', 'Team Member'),
     ]
-    name = models.CharField(max_length=255)
-    position = models.CharField(max_length=100, choices=Position_CHOICES)
-    image = models.ImageField(upload_to=getFileName)
-    linkedin = models.URLField(max_length=500, blank=True)
-    order = models.IntegerField(default=0)
 
-    def __str__(self):
-        return f"{self.name} - {self.position}"
-
-
-class TeamMember(models.Model):
     DOMAIN_CHOICES = [
         ('webdev', 'Web Development'),
         ('dataanalytics', 'Data Analytics'),
@@ -61,21 +48,38 @@ class TeamMember(models.Model):
         ('management', 'Management'),
         ('event', 'Event Management'),
         ('pr', 'Public Relations'),
+        ('none', 'None'),
     ]
 
-    Role_CHOICES = [
+    ROLE_CHOICES = [
         ('lead', 'Lead'),
         ('co-lead', 'Co-lead'),
         ('associate', 'Associate'),
+        ('none', 'None'),
     ]
+
+    POSITION_CHOICES = [
+        ('president', 'President'),
+        ('vice-president', 'Vice-President'),
+        ('secretary', 'Secretary'),
+        ('ceo', 'CEO'),
+        ('hr', 'HR'),
+        ('none', 'None'),
+    ]
+
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='teammember')
     name = models.CharField(max_length=255)
-    role = models.CharField(max_length=100, choices=Role_CHOICES)
-    domain = models.CharField(max_length=50, choices=DOMAIN_CHOICES)
     image = models.ImageField(upload_to=getFileName)
     linkedin = models.URLField(max_length=500, blank=True)
+    order = models.IntegerField(default=0, help_text="Ordering for display")
+    position = models.CharField(max_length=100, choices=POSITION_CHOICES, default='none')
+    role = models.CharField(max_length=100, choices=ROLE_CHOICES, default='none')
+    domain = models.CharField(max_length=50, choices=DOMAIN_CHOICES, default='none')
 
     def __str__(self):
-        return f"{self.name} ({self.domain})"
+        if self.category == 'executive':
+            return f"{self.name} - {self.get_position_display()} (Executive)"
+        return f"{self.name} - {self.get_domain_display()} ({self.get_role_display()})"
 
 
 class GalleryEvent(models.Model):
