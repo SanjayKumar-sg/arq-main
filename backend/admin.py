@@ -13,7 +13,7 @@ class EventsAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'venue', 'participants', 'status')
 
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'role', 'domain', 'position')
+    list_display = ('name', 'category', 'role', 'domain', 'position', 'order')
     list_filter = ('category', 'domain', 'position')
     search_fields = ('name',)
 
