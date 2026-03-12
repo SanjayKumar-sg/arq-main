@@ -275,15 +275,8 @@ function Events() {
           </section>
         )}
 
-        <section style={styles.eventsStatsSection}>
-          <h2 style={styles.statsSectionTitle}>Our Impact in Numbers</h2>
-          <div className="enhanced-stats-grid" style={styles.enhancedStatsGrid}>
-            <div style={styles.enhancedStatsCard}><div style={styles.statsCardIcon}>🎯</div><div style={styles.statsCardNumber}>4+</div><div style={styles.statsCardLabel}>Events Conducted</div><div style={styles.statsCardTrend}><span>📈</span><span>+35% this year</span></div></div>
-            <div style={styles.enhancedStatsCard}><div style={styles.statsCardIcon}>👥</div><div style={styles.statsCardNumber}>50K+</div><div style={styles.statsCardLabel}>Total Participants</div><div style={styles.statsCardTrend}><span>📈</span><span>+40% growth</span></div></div>
-            <div style={styles.enhancedStatsCard}><div style={styles.statsCardIcon}>🏆</div><div style={styles.statsCardNumber}>98%</div><div style={styles.statsCardLabel}>Satisfaction Rate</div><div style={styles.statsCardTrend}><span>📈</span><span>Excellent feedback</span></div></div>
-            <div style={styles.enhancedStatsCard}><div style={styles.statsCardIcon}>🌟</div><div style={styles.statsCardNumber}>5K+</div><div style={styles.statsCardLabel}>Certificates Issued</div><div style={styles.statsCardTrend}><span>📈</span><span>Career boost</span></div></div>
-          </div>
-        </section>
+
+
 
         <section style={styles.successStories}>
           <h2 style={styles.successTitle}>Success Stories</h2>
@@ -457,7 +450,7 @@ const styles = {
   },
   completedEventCard: {
     flexShrink: 0,
-    width: '320px',
+    width: '420px',
     background: '#1F2937',
     borderRadius: '12px',
     overflow: 'hidden',
@@ -465,7 +458,7 @@ const styles = {
   },
   completedEventImage: {
     position: 'relative',
-    height: '160px',
+    height: '220px',
     overflow: 'hidden',
   },
   completedEventImageImg: {
@@ -515,7 +508,7 @@ const styles = {
   },
   completedEventTitle: {
     color: '#ffffff',
-    fontSize: '16px',
+    fontSize: '20px',
     fontWeight: '600',
     margin: '0 0 6px 0',
     lineHeight: '1.3',
@@ -802,8 +795,8 @@ const styles = {
   },
   upcomingEventsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '24px',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
+    gap: '32px',
     padding: '20px 0',
   },
   upcomingEventCard: {
@@ -816,7 +809,7 @@ const styles = {
   },
   upcomingEventImage: {
     position: 'relative',
-    height: '180px',
+    height: '280px',
   },
   upcomingEventImageImg: {
     width: '100%',
@@ -840,7 +833,7 @@ const styles = {
     padding: '20px',
   },
   upcomingEventTitle: {
-    fontSize: '20px',
+    fontSize: '24px',
     fontWeight: '700',
     marginBottom: '10px',
     color: '#ffffff',

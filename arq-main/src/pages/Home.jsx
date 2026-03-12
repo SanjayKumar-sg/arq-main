@@ -21,12 +21,12 @@ export default function ClubHomepage() {
       subtitle: "Where Excellence Meets Passion",
       image: banner
     },
-    {
-      id: 2,
-      title: "Data-Driven Excellence",
-      subtitle: "Analyze • Visualize • Innovate",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=600&fit=crop"
-    },
+    // {
+    //   id: 2,
+    //   title: "Data-Driven Excellence",
+    //   subtitle: "Analyze • Visualize • Innovate",
+    //   image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=600&fit=crop"
+    // },
     {
       id: 3,
       title: "Experience Innovation",
@@ -108,7 +108,7 @@ export default function ClubHomepage() {
 
   const stats = [
     { icon: Users, value: 56, label: "Active Members", key: "members", suffix: "+" },
-    { icon: Calendar, value: 2, label: "Annual Events", key: "events", suffix: "+" },
+    { icon: Calendar, value: 10, label: "Annual Events", key: "events", suffix: "+" },
     { icon: Trophy, value: 2, label: "Awards Won", key: "awards", suffix: "+" },
     { icon: Target, value: 100, label: "Dedication", key: "dedication", suffix: "%" }
   ];
@@ -138,7 +138,7 @@ export default function ClubHomepage() {
             setHasAnimated(true);
             // Start all counter animations
             setTimeout(() => animateCounter(56, 'members'), 20);
-            setTimeout(() => animateCounter(2, 'events'), 1);
+            setTimeout(() => animateCounter(10, 'events'), 1);
             setTimeout(() => animateCounter(2, 'awards'), 600);
             setTimeout(() => animateCounter(100, 'dedication'), 800);
           }
