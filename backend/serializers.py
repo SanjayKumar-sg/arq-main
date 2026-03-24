@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Events, Member, GalleryEvent, GalleryImage, SuccessStory, UpcomingEvent
+from .models import Events, Member, GalleryEvent, GalleryImage, SuccessStory, UpcomingEvent, Service
 
 class EventsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,4 +33,10 @@ class SuccessStorySerializer(serializers.ModelSerializer):
 class UpcomingEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = UpcomingEvent
+        fields = '__all__'
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
         fields = '__all__'

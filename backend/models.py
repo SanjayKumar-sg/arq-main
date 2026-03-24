@@ -31,55 +31,84 @@ class Events(models.Model):
 
 class Member(models.Model):
     CATEGORY_CHOICES = [
-        ('executive', 'Executive'),
-        ('teammember', 'Team Member'),
+        ('Executive', 'Executive'),
+        ('Team Member', 'Team Member'),
     ]
 
     DOMAIN_CHOICES = [
-        ('webdev', 'Web Development'),
-        ('dataanalytics', 'Data Analytics'),
-        ('machinelearning', 'Machine Learning'),
-        ('datasecurity', 'Data Security'),
-        ('cloudcomputing', 'Cloud Computing'),
-        ('design', 'Design & Media'),
-        ('cinematography', 'Cinematography'),
-        ('iot', 'IoT & Hardware'),
-        ('bi', 'Business Intelligence'),
-        ('management', 'Management'),
-        ('event', 'Event Management'),
-        ('pr', 'Public Relations'),
-        ('none', 'None'),
+        ('Web Development', 'Web Development'),
+        ('Data Analytics', 'Data Analytics'),
+        ('Machine Learning', 'Machine Learning'),
+        ('Data Security', 'Data Security'),
+        ('Cloud Computing', 'Cloud Computing'),
+        ('Design & Media', 'Design & Media'),
+        ('Cinematography', 'Cinematography'),
+        ('IoT & Hardware', 'IoT & Hardware'),
+        ('Business Intelligence', 'Business Intelligence'),
+        ('Management', 'Management'),
+        ('Event Management', 'Event Management'),
+        ('Public Relations', 'Public Relations'),
+        ('None', 'None'),
     ]
 
     ROLE_CHOICES = [
-        ('lead', 'Lead'),
-        ('co-lead', 'Co-lead'),
-        ('associate', 'Associate'),
-        ('none', 'None'),
+        ('Lead', 'Lead'),
+        ('Co-lead', 'Co-lead'),
+        ('Associate', 'Associate'),
+        ('None', 'None'),
     ]
 
     POSITION_CHOICES = [
-        ('president', 'President'),
-        ('vice-president', 'Vice-President'),
-        ('secretary', 'Secretary'),
-        ('ceo', 'CEO'),
-        ('hr', 'HR'),
-        ('none', 'None'),
+        ('President', 'President'),
+        ('Vice-President', 'Vice-President'),
+        ('Secretary', 'Secretary'),
+        ('CEO', 'CEO'),
+        ('HR', 'HR'),
+        ('None', 'None'),
     ]
 
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='teammember')
+    TEAM_TAB_CHOICES = [
+        (1, 'Previous Tenure'),
+        (2, 'Current Tenure'),
+    ]
+
+    team_tab = models.IntegerField(choices=TEAM_TAB_CHOICES, default=1)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='Team Member')
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to=getFileName)
     linkedin = models.URLField(max_length=500, blank=True)
     order = models.IntegerField(default=0, help_text="Ordering for display")
-    position = models.CharField(max_length=100, choices=POSITION_CHOICES, default='none')
-    role = models.CharField(max_length=100, choices=ROLE_CHOICES, default='none')
-    domain = models.CharField(max_length=50, choices=DOMAIN_CHOICES, default='none')
+    position = models.CharField(max_length=100, choices=POSITION_CHOICES, default='None')
+    role = models.CharField(max_length=100, choices=ROLE_CHOICES, default='None')
+    domain = models.CharField(max_length=50, choices=DOMAIN_CHOICES, default='None')
 
     def __str__(self):
-        if self.category == 'executive':
+        if self.category == 'Executive':
             return f"{self.name} - {self.get_position_display()} (Executive)"
         return f"{self.name} - {self.get_domain_display()} ({self.get_role_display()})"
+
+
+class Tab1MemberManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(team_tab=1)
+
+class Tab1Member(Member):
+    objects = Tab1MemberManager()
+    class Meta:
+        proxy = True
+        verbose_name = 'Previous Tenure'
+        verbose_name_plural = 'Previous Tenure'
+
+class Tab2MemberManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(team_tab=2)
+
+class Tab2Member(Member):
+    objects = Tab2MemberManager()
+    class Meta:
+        proxy = True
+        verbose_name = 'Current Tenure'
+        verbose_name_plural = 'Current Tenure'
 
 
 class GalleryEvent(models.Model):
@@ -119,6 +148,16 @@ class UpcomingEvent(models.Model):
     image = models.ImageField(upload_to=getFileName, null=True, blank=True)
     link = models.URLField(max_length=500, blank=True, help_text="Registration link")
     posted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+class Service(models.Model):
+    title = models.CharField(max_length=255, default="Service")
+    description = models.TextField(blank=True, default="")
+    image = models.ImageField(upload_to=getFileName)
+    url = models.URLField(max_length=500, blank=True)
 
     def __str__(self):
         return self.title

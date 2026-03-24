@@ -145,6 +145,13 @@ function Events() {
         .announcement-text { animation: shimmer 2s infinite linear; background: linear-gradient(to right, #8b5cf6 0%, #ffffff 50%, #8b5cf6 100%); background-size: 200px 100%; background-clip: text; -webkit-background-clip: text; color: transparent; }
         .floating-icon { animation: float 3s ease-in-out infinite; }
         .glowing-card { animation: glow 2s ease-in-out infinite; }
+        .scroll-wrapper-anim { animation: horizontal-scroll 40s linear infinite; }
+        .scroll-wrapper-anim:hover { animation-play-state: paused; }
+        .manual-scroll-container { overflow-x: auto; scroll-behavior: smooth; }
+        .manual-scroll-container::-webkit-scrollbar { height: 6px; }
+        .manual-scroll-container::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; margin: 0 15px; }
+        .manual-scroll-container::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.6); border-radius: 10px; transition: background 0.3s ease; }
+        .manual-scroll-container::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 1); }
         body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; }
         @media (max-width: 768px) {
           .events-grid { grid-template-columns: 1fr!important; }
@@ -238,8 +245,8 @@ function Events() {
               <h2 style={styles.eventsSectionTitle}>Past Events</h2>
               <p style={styles.eventsSectionSubtitle}>Celebrating our successful events and achievements</p>
             </div>
-            <div style={styles.completedEventsScrollContainer}>
-              <div style={styles.completedEventsScrollWrapper}>
+            <div className="manual-scroll-container" style={styles.completedEventsScrollContainer}>
+              <div className="scroll-wrapper-anim" style={styles.completedEventsScrollWrapper}>
                 {[...completedEvents,...completedEvents].map((event,i)=>(
                   <div key={`${event.id}-${i}`} style={styles.completedEventCard} onClick={() => setSelectedEvent(event)}>
                     <div style={styles.completedEventImage}>
@@ -439,13 +446,13 @@ const styles = {
   },
   completedEventsScrollContainer: {
     position: 'relative',
-    overflow: 'hidden',
-    padding: '15px 0',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    padding: '15px 0 25px 0', // Extra bottom padding for scrollbar
   },
   completedEventsScrollWrapper: {
     display: 'flex',
     gap: '20px',
-    animation: 'horizontal-scroll 40s linear infinite',
     width: 'fit-content',
   },
   completedEventCard: {

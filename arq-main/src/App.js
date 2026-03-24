@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import TeamPage from "./pages/Team";
 import Events from "./pages/Events";
 import Gallery from "./pages/Gallery";
+import Services from "./pages/Services";
 
 // Import components
 import Navbar from "./components/Navbar";
@@ -26,6 +27,7 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/services" element={<Services />} />
           <Route path="/team" element={<TeamPage />} />
           <Route path="/events" element={<Events />} />
           <Route path="/gallery" element={<Gallery />} />

@@ -9,21 +9,13 @@ export default function TeamPage() {
   const [executives, setExecutives] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState(1);
 
   // State for tracking current person in each domain
   const [domainIndex, setDomainIndex] = useState({
-    webdev: 0,
-    dataanalytics: 0,
-    machinelearning: 0,
-    datasecurity: 0,
-    cloudcomputing: 0,
-    design: 0,
-    cinematography: 0,
-    iot: 0,
-    bi: 0,
-    management: 0,
-    event: 0,
-    pr: 0
+    "Web Development": 0, "Data Analytics": 0, "Machine Learning": 0, "Data Security": 0,
+    "Cloud Computing": 0, "Design & Media": 0, "Cinematography": 0, "IoT & Hardware": 0,
+    "Business Intelligence": 0, "Management": 0, "Event Management": 0, "Public Relations": 0, "None": 0
   });
 
   const API_URL = "http://127.0.0.1:8000";
@@ -43,22 +35,23 @@ export default function TeamPage() {
   }, []);
 
   const domainConfigs = {
-    webdev: { title: "Web Development", icon: Code, color: "#3b82f6" },
-    dataanalytics: { title: "Data Analytics", icon: Database, color: "#10b981" },
-    machinelearning: { title: "Machine Learning", icon: Target, color: "#f97316" },
-    datasecurity: { title: "Data Security", icon: Shield, color: "#ef4444" },
-    cloudcomputing: { title: "Cloud Computing", icon: Cloud, color: "#06b6d4" },
-    design: { title: "Design & Media", icon: Palette, color: "#f59e0b" },
-    cinematography: { title: "Cinematography", icon: Camera, color: "#ec4899" },
-    iot: { title: "IoT & Hardware", icon: Zap, color: "#84cc16" },
-    bi: { title: "Business Intelligence", icon: BarChart3, color: "#8b5cf6" },
-    management: { title: "Management", icon: Users, color: "#a855f7" },
-    event: { title: "Event Management", icon: Calendar, color: "#06b6d4" },
-    pr: { title: "Public Relations", icon: Megaphone, color: "#f59e0b" }
+    "Web Development": { title: "Web Development", icon: Code, color: "#3b82f6" },
+    "Data Analytics": { title: "Data Analytics", icon: Database, color: "#10b981" },
+    "Machine Learning": { title: "Machine Learning", icon: Target, color: "#f97316" },
+    "Data Security": { title: "Data Security", icon: Shield, color: "#ef4444" },
+    "Cloud Computing": { title: "Cloud Computing", icon: Cloud, color: "#06b6d4" },
+    "Design & Media": { title: "Design & Media", icon: Palette, color: "#f59e0b" },
+    "Cinematography": { title: "Cinematography", icon: Camera, color: "#ec4899" },
+    "IoT & Hardware": { title: "IoT & Hardware", icon: Zap, color: "#84cc16" },
+    "Business Intelligence": { title: "Business Intelligence", icon: BarChart3, color: "#8b5cf6" },
+    "Management": { title: "Management", icon: Users, color: "#a855f7" },
+    "Event Management": { title: "Event Management", icon: Calendar, color: "#06b6d4" },
+    "Public Relations": { title: "Public Relations", icon: Megaphone, color: "#f59e0b" },
+    "None": { title: "None", icon: Users, color: "#6b7280" }
   };
 
   const getDomainMembers = (domainKey) => {
-    return teamMembers.filter(m => m.domain === domainKey);
+    return teamMembers.filter(m => m.domain === domainKey && m.team_tab === activeTab + 1);
   };
 
   // Navigation functions for domains
@@ -132,6 +125,67 @@ export default function TeamPage() {
           padding: 0 1rem;
           position: relative;
           z-index: 1;
+        }
+
+        .team-tabs {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+          margin-bottom: 4rem;
+          position: relative;
+          z-index: 10;
+        }
+        .team-tab {
+          padding: 0.75rem 2rem;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(168, 85, 247, 0.3);
+          border-radius: 50px;
+          color: #cbd5e1;
+          font-size: 1.1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        .team-tab.active {
+          background: #a855f7;
+          color: #ffffff;
+          border-color: transparent;
+          box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+        }
+        .team-tab:hover:not(.active) {
+          background: rgba(168, 85, 247, 0.15);
+          color: #ffffff;
+        }
+        .skeleton-circle {
+          background: #f1f5f9 !important;
+          outline-color: #e2e8f0 !important;
+        }
+        .skeleton-info {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .skeleton-line {
+          background: #e2e8f0;
+          border-radius: 4px;
+          height: 1.25rem;
+          margin-bottom: 0.5rem;
+        }
+        .skeleton-title {
+          width: 60%;
+        }
+        .skeleton-subtitle {
+          width: 40%;
+          height: 0.85rem;
+          background: #e2e8f0;
+        }
+        .skeleton-pill {
+          width: 100px;
+          height: 32px;
+          background: #e2e8f0;
+          border-color: transparent !important;
+          margin: 0 auto 0.85rem auto;
         }
 
         .page-header {
@@ -643,11 +697,26 @@ export default function TeamPage() {
             </p>
           </div>
 
-          {/* Executive Section - 3-2 Grid Layout with Centered Bottom Row */}
-          <div className="executives-section">
+          <div className="team-tabs">
+            <button 
+              className={`team-tab ${activeTab === 1 ? 'active' : ''}`}
+              onClick={() => setActiveTab(1)}
+            >
+              Current Tenure
+            </button>
+            <button 
+              className={`team-tab ${activeTab === 0 ? 'active' : ''}`}
+              onClick={() => setActiveTab(0)}
+            >
+              Previous Tenure
+            </button>
+          </div>
+
+              {/* Executive Section - 3-2 Grid Layout with Centered Bottom Row */}
+              <div className="executives-section">
             <h2 className="section-title">Executive Team</h2>
             <div className="executives-flow">
-              {executives.map((executive, index) => (
+              {executives.filter(e => e.team_tab === activeTab + 1).map((executive, index) => (
                 <div key={index} className="executive-member">
                   <div className="member-profile">
                     <a 
@@ -680,7 +749,7 @@ export default function TeamPage() {
               {Object.entries(domainConfigs).map(([domainKey, config]) => {
                 const domainMembers = getDomainMembers(domainKey);
                 if (domainMembers.length === 0) return null;
-                const currentMember = domainMembers[domainIndex[domainKey]];
+                const currentMember = domainMembers[domainIndex[domainKey]] || domainMembers[0];
                 const Icon = config.icon;
                 
                 return (

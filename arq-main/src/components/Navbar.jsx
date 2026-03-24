@@ -144,6 +144,7 @@ export default function Navbar() {
 // CORRECTED LINKS ARRAY - Remove the "../" prefixes
 const links = [
   { label: "Home", to: "/" },
+  { label: "Services", to: "/services" },
   { label: "Team", to: "/team" },        // Changed from "../team"
   { label: "Events", to: "/events" },    // Changed from "../events"
   { label: "Gallery", to: "/gallery" },  // Changed from "../gallery"
