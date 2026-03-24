@@ -10,7 +10,47 @@ def getFileName(instance, filename):
     return os.path.join('uploads/', new_filename)
 
 
+# ──────────────────────────────────────────
+#  HOME PAGE
+# ──────────────────────────────────────────
+
+class OurStory(models.Model):
+    """Timeline entries shown in the 'Our Story' section on the Home page."""
+    title = models.CharField(max_length=255)
+    sub_title = models.CharField(max_length=255)
+    description = models.TextField()
+    order = models.IntegerField(default=0, help_text="Display order (lower = first)")
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Our Story'
+        verbose_name_plural = 'Our Story Entries'
+
+    def __str__(self):
+        return self.title
+
+
+class FAQ(models.Model):
+    """Frequently Asked Questions shown on the Home page."""
+    question = models.CharField(max_length=500)
+    answer = models.TextField()
+    order = models.IntegerField(default=0, help_text="Display order (lower = first)")
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'FAQ'
+        verbose_name_plural = 'FAQs'
+
+    def __str__(self):
+        return self.question
+
+
+# ──────────────────────────────────────────
+#  EVENTS PAGE
+# ──────────────────────────────────────────
+
 class Events(models.Model):
+    """Past / completed events."""
     title = models.CharField(max_length=255, default="")
     date = models.CharField(max_length=100, default="")
     type = models.CharField(max_length=100, default="")
@@ -25,9 +65,50 @@ class Events(models.Model):
     short_info = models.TextField(default="")
     posted_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Event'
+        verbose_name_plural = 'Events'
+
     def __str__(self):
         return self.title
 
+
+class UpcomingEvent(models.Model):
+    """Future / upcoming events."""
+    title = models.CharField(max_length=255)
+    date = models.CharField(max_length=100)
+    venue = models.CharField(max_length=255, default="Virtual Event")
+    description = models.TextField()
+    short_info = models.TextField(blank=True)
+    image = models.ImageField(upload_to=getFileName, null=True, blank=True)
+    link = models.URLField(max_length=500, blank=True, help_text="Registration link")
+    posted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Upcoming Event'
+        verbose_name_plural = 'Upcoming Events'
+
+    def __str__(self):
+        return self.title
+
+
+class SuccessStory(models.Model):
+    """Success stories shown on the Events page."""
+    name = models.CharField(max_length=255)
+    story = models.TextField()
+    year = models.CharField(max_length=4)
+
+    class Meta:
+        verbose_name = 'Success Story'
+        verbose_name_plural = 'Success Stories'
+
+    def __str__(self):
+        return f"{self.name} ({self.year})"
+
+
+# ──────────────────────────────────────────
+#  TEAM PAGE
+# ──────────────────────────────────────────
 
 class Member(models.Model):
     CATEGORY_CHOICES = [
@@ -82,6 +163,10 @@ class Member(models.Model):
     role = models.CharField(max_length=100, choices=ROLE_CHOICES, default='None')
     domain = models.CharField(max_length=50, choices=DOMAIN_CHOICES, default='None')
 
+    class Meta:
+        verbose_name = 'Member'
+        verbose_name_plural = 'Members'
+
     def __str__(self):
         if self.category == 'Executive':
             return f"{self.name} - {self.get_position_display()} (Executive)"
@@ -111,12 +196,20 @@ class Tab2Member(Member):
         verbose_name_plural = 'Current Tenure'
 
 
+# ──────────────────────────────────────────
+#  GALLERY PAGE
+# ──────────────────────────────────────────
+
 class GalleryEvent(models.Model):
     title = models.CharField(max_length=255)
     date = models.CharField(max_length=100)
     location = models.CharField(max_length=255)
     attendees = models.CharField(max_length=100)
     thumbnail = models.ImageField(upload_to=getFileName)
+
+    class Meta:
+        verbose_name = 'Gallery Event'
+        verbose_name_plural = 'Gallery Events'
 
     def __str__(self):
         return self.title
@@ -126,38 +219,27 @@ class GalleryImage(models.Model):
     event = models.ForeignKey(GalleryEvent, related_name='images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to=getFileName)
 
+    class Meta:
+        verbose_name = 'Gallery Image'
+        verbose_name_plural = 'Gallery Images'
+
     def __str__(self):
         return f"Image for {self.event.title}"
 
 
-class SuccessStory(models.Model):
-    name = models.CharField(max_length=255)
-    story = models.TextField()
-    year = models.CharField(max_length=4)
-
-    def __str__(self):
-        return f"{self.name} ({self.year})"
-
-
-class UpcomingEvent(models.Model):
-    title = models.CharField(max_length=255)
-    date = models.CharField(max_length=100)
-    venue = models.CharField(max_length=255, default="Virtual Event")
-    description = models.TextField()
-    short_info = models.TextField(blank=True)
-    image = models.ImageField(upload_to=getFileName, null=True, blank=True)
-    link = models.URLField(max_length=500, blank=True, help_text="Registration link")
-    posted_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-
+# ──────────────────────────────────────────
+#  SERVICES PAGE
+# ──────────────────────────────────────────
 
 class Service(models.Model):
     title = models.CharField(max_length=255, default="Service")
     description = models.TextField(blank=True, default="")
     image = models.ImageField(upload_to=getFileName)
     url = models.URLField(max_length=500, blank=True)
+
+    class Meta:
+        verbose_name = 'Service'
+        verbose_name_plural = 'Services'
 
     def __str__(self):
         return self.title

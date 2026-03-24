@@ -152,7 +152,8 @@ function Events() {
         .manual-scroll-container::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; margin: 0 15px; }
         .manual-scroll-container::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.6); border-radius: 10px; transition: background 0.3s ease; }
         .manual-scroll-container::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 1); }
-        body { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; }
+        :global(body) { margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000; color: #fff; scrollbar-width: none; -ms-overflow-style: none; }
+        :global(body)::-webkit-scrollbar { display: none; }
         @media (max-width: 768px) {
           .events-grid { grid-template-columns: 1fr!important; }
           .enhanced-stats-grid { grid-template-columns: repeat(2,1fr)!important; }

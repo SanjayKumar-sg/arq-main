@@ -33,6 +33,15 @@ export default function ServicesPage() {
           overflow-x: hidden;
         }
 
+        /* Hide scrollbar for the entire page while on Services */
+        body {
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE/Edge */
+        }
+        body::-webkit-scrollbar {
+          display: none; /* Chrome/Safari */
+        }
+
         .services-page::before {
           content: '';
           position: absolute;

@@ -60,11 +60,11 @@ export default function Footer() {
         <hr style={styles.line} />
         <div style={styles.bottomContent}>
           <p style={styles.copy}>
-            © {new Date().getFullYear()} ARQ REC. All Rights Reserved.
+            &copy; {new Date().getFullYear()} ARQ REC. All Rights Reserved.
           </p>
           <div style={styles.policies}>
           <p>
-            Website by <a href="https://sanjaykishore18.github.io/Sanjaykishore18/" target="_blank" rel="noopener noreferrer" style={{ color: "#8b5cf6" }}>SanjayKishore T</a> &amp; <a href="https://yourassociateportfolio.com" target="_blank" rel="noopener noreferrer" style={{ color: "#8b5cf6" }}>Shalini K</a> Assisted by-Sanjay kumar, Lejo
+            Website by <a href="https://sanjaykishore18.github.io/Sanjaykishore18/" target="_blank" rel="noopener noreferrer" style={{ color: "#8b5cf6" }}>SanjayKishore T</a> &amp; <a href="https://shalini030.github.io/" target="_blank" rel="noopener noreferrer" style={{ color: "#8b5cf6" }}>Shalini K</a> &amp; <a href="https://sanjaykumar-sg.github.io/Portfolio_sk/" target="_blank" rel="noopener noreferrer" style={{ color: "#8b5cf6" }}>Sanjay Kumar SG</a> &amp;<a href="https://portfolio-lejo-c.netlify.app/" target="_blank" rel="noopener noreferrer" style={{ color: "#8b5cf6" }}>Lejo C</a>
           </p>
 
           </div>

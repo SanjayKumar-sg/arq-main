@@ -11,8 +11,24 @@ export default function ClubHomepage() {
   const [counters, setCounters] = useState({ members: 0, events: 0, awards: 0, dedication: 0 });
   const [hasAnimated, setHasAnimated] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
+  const [storyEvents, setStoryEvents] = useState([]);
+  const [faqData, setFaqData] = useState([]);
   const statsRef = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/our-story/')
+      .then(res => res.json())
+      .then(data => setStoryEvents(data))
+      .catch(() => { });
+  }, []);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/faqs/')
+      .then(res => res.json())
+      .then(data => { if (data.length > 0) setFaqData(data); })
+      .catch(() => { });
+  }, []);
 
   const banners = [
     {
@@ -87,24 +103,6 @@ export default function ClubHomepage() {
     },
   ];
 
-  const faqData = [
-    {
-      question: "What is ARQ all about?",
-      answer: "ARQ is a dynamic tech community focused on fostering innovation, collaboration, and skill development. We bring together developers, designers, and tech enthusiasts to learn, build, and grow together through various projects, workshops, and events."
-    },
-    {
-      question: "Who should join this club?",
-      answer: "Anyone passionate about technology and innovation! Whether you're a student, professional developer, designer, or just someone curious about tech, our club welcomes all skill levels. We believe in inclusive learning and collaborative growth."
-    },
-    {
-      question: "What kind of activities does the club organize?",
-      answer: "The club hosts workshops, hackathons, tech talks, and innovation challenges focused on AI, data science, and emerging technologies — giving members hands-on experience and networking opportunities."
-    },
-    {
-      question: "How do I join?",
-      answer: "Joining is simple! You can register through our website, attend one of our open events, or reach out to any of our current members. We conduct regular orientation sessions for new members to help you get started on your journey with us."
-    }
-  ];
 
   const stats = [
     { icon: Users, value: 56, label: "Active Members", key: "members", suffix: "+" },
@@ -117,7 +115,7 @@ export default function ClubHomepage() {
   const animateCounter = (target, key, duration = 2000) => {
     let start = 0;
     const increment = target / (duration / 16);
-    
+
     const timer = setInterval(() => {
       start += increment;
       if (start >= target) {
@@ -708,11 +706,15 @@ export default function ClubHomepage() {
         .timeline-section {
           padding: 2rem 0;
           animation: slideInLeft 1s ease-out;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
         }
 
         .timeline-header {
           text-align: center;
-          margin-bottom: 3rem;
+          margin-bottom: 2rem;
+          flex-shrink: 0;
         }
 
         .timeline-header h3 {
@@ -726,6 +728,19 @@ export default function ClubHomepage() {
           color: #8b5cf6;
           font-weight: 500;
           font-size: 1.125rem;
+        }
+
+        /* Scrollable timeline wrapper – shows ~3 items, no scrollbar */
+        .timeline-scroll-wrapper {
+          flex: 1;
+          overflow-y: auto;
+          scrollbar-width: none;       /* Firefox */
+          -ms-overflow-style: none;    /* IE/Edge */
+          padding-right: 0.25rem;
+        }
+
+        .timeline-scroll-wrapper::-webkit-scrollbar {
+          display: none;               /* Chrome/Safari */
         }
 
         .timeline {
@@ -816,6 +831,9 @@ export default function ClubHomepage() {
           font-size: 1rem;
           color: rgba(255, 255, 255, 0.8);
           line-height: 1.6;
+          white-space: pre-wrap;
+          word-break: break-word;
+          overflow-wrap: break-word;
         }
 
         /* FAQ & CTA Section - WHITE BACKGROUND WITH SLANT */
@@ -1573,7 +1591,7 @@ export default function ClubHomepage() {
       `}</style>
 
       <div className="club-homepage">
-        
+
         {/* Hero Banner Carousel */}
         <div className="hero-carousel">
           {banners.map((banner, index) => (
@@ -1581,13 +1599,13 @@ export default function ClubHomepage() {
               key={banner.id}
               className={`banner-slide ${index === currentBanner ? 'active' : ''}`}
             >
-              <img 
-                src={banner.image} 
+              <img
+                src={banner.image}
                 alt={banner.title}
                 className="banner-image"
               />
               <div className="banner-overlay"></div>
-              
+
               <div className="banner-content">
                 <div className="banner-text">
                   <h1 className="banner-title">{banner.title}</h1>
@@ -1620,25 +1638,8 @@ export default function ClubHomepage() {
           </div>
         </div>
 
-        {/* Stats Section - WHITE BACKGROUND */}
+        {/* Stats Section - WHITE BACKGROUND (empty space kept) */}
         <div className="stats-section" ref={statsRef}>
-          <div className="container">
-            <div className="stats-card">
-              <div className="stats-grid">
-                {stats.map((stat, index) => (
-                  <div key={index} className="stat-item">
-                    <div className="stat-icon">
-                      <stat.icon />
-                    </div>
-                    <div className="stat-value">
-                      {counters[stat.key]}{stat.suffix}
-                    </div>
-                    <div className="stat-label">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Mission, Vision, Values Section - BLACK BACKGROUND - NEW DESIGN */}
@@ -1690,9 +1691,9 @@ export default function ClubHomepage() {
                               <h3>{content.title}</h3>
                             </div>
                           </div>
-                          
+
                           <p className="content-description">{content.description}</p>
-                          
+
                           <div className="highlights-container">
                             {content.highlights.map((highlight, index) => (
                               <div key={index} className="highlight-pill">
@@ -1715,22 +1716,44 @@ export default function ClubHomepage() {
                     <h3>Our Story</h3>
                     <p>Journey through time</p>
                   </div>
-                  <div className="timeline">
-                    {timelineEvents.map((event, index) => {
-                      const Icon = event.icon;
-                      return (
-                        <div key={index} className="timeline-item">
-                          <div className="timeline-dot">
-                            <Icon />
-                          </div>
-                          <div className="timeline-content-item">
-                            <div className="timeline-year">{event.year}</div>
-                            <div className="timeline-title">{event.title}</div>
-                            <div className="timeline-description">{event.description}</div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                  {/* Scroll wrapper: max-height shows ~3 items, hidden scrollbar */}
+                  <div className="timeline-scroll-wrapper" style={{ maxHeight: '36rem' }}>
+                    <div className="timeline">
+                      {storyEvents.length > 0 ? (
+                        storyEvents.map((event, index) => {
+                          const storyIcons = [Rocket, Star, Trophy, Globe, Target, Eye, Award];
+                          const Icon = storyIcons[index % storyIcons.length];
+                          return (
+                            <div key={event.id} className="timeline-item">
+                              <div className="timeline-dot">
+                                <Icon />
+                              </div>
+                              <div className="timeline-content-item">
+                                <div className="timeline-year">{event.sub_title}</div>
+                                <div className="timeline-title">{event.title}</div>
+                                <div className="timeline-description">{event.description}</div>
+                              </div>
+                            </div>
+                          );
+                        })
+                      ) : (
+                        timelineEvents.map((event, index) => {
+                          const Icon = event.icon;
+                          return (
+                            <div key={index} className="timeline-item">
+                              <div className="timeline-dot">
+                                <Icon />
+                              </div>
+                              <div className="timeline-content-item">
+                                <div className="timeline-year">{event.year}</div>
+                                <div className="timeline-title">{event.title}</div>
+                                <div className="timeline-description">{event.description}</div>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1749,11 +1772,11 @@ export default function ClubHomepage() {
               </div>
               <div className="faq-list">
                 {faqData.map((faq, index) => (
-                  <div 
-                    key={index} 
+                  <div
+                    key={index}
                     className={`faq-item ${openFAQ === index ? 'open' : ''}`}
                   >
-                    <button 
+                    <button
                       className="faq-question"
                       onClick={() => toggleFAQ(index)}
                     >
