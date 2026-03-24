@@ -27,7 +27,7 @@ class FAQAdmin(ModelAdmin):
 
 # ── EVENTS PAGE ────────────────────────────
 class EventsAdmin(ModelAdmin):
-    list_display = ('title', 'date', 'venue', 'participants', 'status')
+    list_display = ('title', 'date', 'venue', 'participants', 'status', 'report')
 
 
 class UpcomingEventAdmin(ModelAdmin):

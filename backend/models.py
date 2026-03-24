@@ -63,6 +63,7 @@ class Events(models.Model):
     venue = models.CharField(max_length=255, default="Virtual Event")
     description = models.TextField(default="")
     short_info = models.TextField(default="")
+    report = models.FileField(upload_to=getFileName, null=True, blank=True, help_text="Event report file (PDF, etc.)")
     posted_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

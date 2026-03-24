@@ -55,9 +55,29 @@ function EventModal({ event, onClose }) {
         </div>
         <div style={styles.eventModalFooter}>
           <div style={styles.eventModalActions}>
-            <button style={styles.buttonPrimary} onClick={onClose}>
-              Join Event
-            </button>
+            {event.status === "Completed" ? (
+              <button 
+                style={styles.buttonPrimary} 
+                onClick={() => {
+                  if (event.report) {
+                    const reportUrl = event.report.startsWith('http') ? event.report : `http://127.0.0.1:8000${event.report}`;
+                    const link = document.createElement('a');
+                    link.href = reportUrl;
+                    link.target = '_blank';
+                    link.download = '';
+                    link.click();
+                  } else {
+                    alert("Report not available for this event.");
+                  }
+                }}
+              >
+                Download Report
+              </button>
+            ) : (
+              <button style={styles.buttonPrimary} onClick={onClose}>
+                Join Event
+              </button>
+            )}
             <button style={styles.buttonSecondary} onClick={onClose}>
               Learn More
             </button>
@@ -83,6 +103,7 @@ function Events() {
     minutes: 0,
     seconds: 0
   });
+  const [selectedYear, setSelectedYear] = useState('All');
 
   const API_URL = "http://127.0.0.1:8000";
 
@@ -119,6 +140,15 @@ function Events() {
 
   const completedEvents = allEvents.filter(e => e.status === "Completed");
   const upcomingEvents = allEvents.filter(e => e.status !== "Completed");
+
+  const uniqueYears = ['All', ...new Set(completedEvents.map(e => {
+    const match = e.date.match(/\d{4}/);
+    return match ? match[0] : null;
+  }).filter(Boolean))].sort((a, b) => b - a);
+
+  const filteredCompletedEvents = selectedYear === 'All' 
+    ? completedEvents 
+    : completedEvents.filter(e => e.date.includes(selectedYear));
 
   // Animation for dots
   useEffect(() => {
@@ -245,37 +275,56 @@ function Events() {
             <div style={styles.eventsSectionHeader}>
               <h2 style={styles.eventsSectionTitle}>Past Events</h2>
               <p style={styles.eventsSectionSubtitle}>Celebrating our successful events and achievements</p>
+              
+              <div style={styles.filterContainer}>
+                <label style={styles.filterLabel}>Filter by Year: </label>
+                <select 
+                  style={styles.yearSelect} 
+                  value={selectedYear} 
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                >
+                  {uniqueYears.map(year => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             <div className="manual-scroll-container" style={styles.completedEventsScrollContainer}>
               <div className="scroll-wrapper-anim" style={styles.completedEventsScrollWrapper}>
-                {[...completedEvents,...completedEvents].map((event,i)=>(
-                  <div key={`${event.id}-${i}`} style={styles.completedEventCard} onClick={() => setSelectedEvent(event)}>
-                    <div style={styles.completedEventImage}>
-                       <img src={event.image && event.image.startsWith('http') ? event.image : (event.image ? `${API_URL}${event.image}` : '')} alt={event.title} style={styles.completedEventImageImg}/>
-                      <div style={styles.completedEventOverlay}>
-                        <span style={styles.eventTypeBadge}>{event.type}</span>
-                        <div style={styles.eventRating}><span style={styles.ratingStars}>⭐</span><span style={styles.ratingScore}>{event.rating}</span></div>
+                {(filteredCompletedEvents.length > 0 ? (
+                  [...filteredCompletedEvents, ...filteredCompletedEvents].map((event, i) => (
+                    <div key={`${event.id}-${i}`} style={styles.completedEventCard} onClick={() => setSelectedEvent(event)}>
+                      <div style={styles.completedEventImage}>
+                        <img src={event.image && event.image.startsWith('http') ? event.image : (event.image ? `${API_URL}${event.image}` : '')} alt={event.title} style={styles.completedEventImageImg} />
+                        <div style={styles.completedEventOverlay}>
+                          <span style={styles.eventTypeBadge}>{event.type}</span>
+                          <div style={styles.eventRating}><span style={styles.ratingStars}>⭐</span><span style={styles.ratingScore}>{event.rating}</span></div>
+                        </div>
+                      </div>
+                      <div style={styles.completedEventContent}>
+                        <div style={styles.completedEventHeader}>
+                          <h3 style={styles.completedEventTitle}>{event.title}</h3>
+                          <span style={styles.completedEventStatus}>{event.status}</span>
+                        </div>
+                        <div style={styles.completedEventMeta}>
+                          <div style={styles.completedMetaItem}><span style={styles.metaIcon}>📅</span><span>{event.date}</span></div>
+                          <div style={styles.completedMetaItem}><span style={styles.metaIcon}>⏱</span><span>{event.duration}</span></div>
+                        </div>
+                        <div style={styles.completedEventHighlights}>
+                          <h4 style={styles.highlightsTitle}>Highlights</h4>
+                          <p style={styles.highlightsText}>{event.highlights}</p>
+                        </div>
+                        <div style={styles.completedEventStats}>
+                          <div style={styles.statItem}><div style={styles.statNumber}>{event.participants || "-"}</div><div style={styles.statLabel}>Participants</div></div>
+                          <div style={styles.statItem}><div style={styles.statNumber}>{event.rating}</div><div style={styles.statLabel}>Rating</div></div>
+                          <div style={styles.statItem}><div style={styles.statNumber}>100%</div><div style={styles.statLabel}>Completion</div></div>
+                        </div>
                       </div>
                     </div>
-                    <div style={styles.completedEventContent}>
-                      <div style={styles.completedEventHeader}>
-                        <h3 style={styles.completedEventTitle}>{event.title}</h3>
-                        <span style={styles.completedEventStatus}>{event.status}</span>
-                      </div>
-                      <div style={styles.completedEventMeta}>
-                        <div style={styles.completedMetaItem}><span style={styles.metaIcon}>📅</span><span>{event.date}</span></div>
-                        <div style={styles.completedMetaItem}><span style={styles.metaIcon}>⏱</span><span>{event.duration}</span></div>
-                      </div>
-                      <div style={styles.completedEventHighlights}>
-                        <h4 style={styles.highlightsTitle}>Highlights</h4>
-                        <p style={styles.highlightsText}>{event.highlights}</p>
-                      </div>
-                      <div style={styles.completedEventStats}>
-                        <div style={styles.statItem}><div style={styles.statNumber}>{event.participants||"-"}</div><div style={styles.statLabel}>Participants</div></div>
-                        <div style={styles.statItem}><div style={styles.statNumber}>{event.rating}</div><div style={styles.statLabel}>Rating</div></div>
-                        <div style={styles.statItem}><div style={styles.statNumber}>100%</div><div style={styles.statLabel}>Completion</div></div>
-                      </div>
-                    </div>
+                  ))
+                ) : (
+                  <div style={{ color: '#9CA3AF', padding: '40px', textAlign: 'center', width: '100%' }}>
+                    No past events found for year {selectedYear}
                   </div>
                 ))}
               </div>
@@ -870,6 +919,28 @@ const styles = {
     textDecoration: 'none',
     fontWeight: '600',
     fontSize: '14px',
+  },
+  filterContainer: {
+    marginTop: '15px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+  },
+  filterLabel: {
+    fontSize: '14px',
+    color: '#9CA3AF',
+    fontWeight: '500',
+  },
+  yearSelect: {
+    padding: '6px 12px',
+    background: '#1F2937',
+    color: '#ffffff',
+    border: '1px solid #374151',
+    borderRadius: '4px',
+    fontSize: '14px',
+    cursor: 'pointer',
+    outline: 'none',
   },
 };
 
