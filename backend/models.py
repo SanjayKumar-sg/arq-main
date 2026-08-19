@@ -114,6 +114,7 @@ class SuccessStory(models.Model):
 class Member(models.Model):
     CATEGORY_CHOICES = [
         ('Executive', 'Executive'),
+        ('Club Coordinator', 'Club Coordinator'),
         ('Team Member', 'Team Member'),
     ]
 
@@ -121,6 +122,8 @@ class Member(models.Model):
         ('Web Development', 'Web Development'),
         ('Data Analytics', 'Data Analytics'),
         ('Machine Learning', 'Machine Learning'),
+        ('Data Engineering', 'Data Engineering'),
+        ('Generative AI', 'Generative AI'),
         ('Data Security', 'Data Security'),
         ('Cloud Computing', 'Cloud Computing'),
         ('Design & Media', 'Design & Media'),
@@ -146,6 +149,8 @@ class Member(models.Model):
         ('Secretary', 'Secretary'),
         ('CEO', 'CEO'),
         ('HR', 'HR'),
+        ('Head of Operations', 'Head of Operations'),
+        ('Coordinator','Coordinator'),
         ('None', 'None'),
     ]
 
@@ -171,6 +176,8 @@ class Member(models.Model):
     def __str__(self):
         if self.category == 'Executive':
             return f"{self.name} - {self.get_position_display()} (Executive)"
+        if self.category == 'Club Coordinator':
+            return f"{self.name} - {self.get_position_display()} (Club Coordinator)"
         return f"{self.name} - {self.get_domain_display()} ({self.get_role_display()})"
 
 
@@ -195,6 +202,29 @@ class Tab2Member(Member):
         proxy = True
         verbose_name = 'Current Tenure'
         verbose_name_plural = 'Current Tenure'
+
+
+class Tab1CoordinatorManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(team_tab=1, category='Club Coordinator')
+
+class Tab1Coordinator(Member):
+    objects = Tab1CoordinatorManager()
+    class Meta:
+        proxy = True
+        verbose_name = 'Previous Tenure Coordinator'
+        verbose_name_plural = 'Previous Tenure Coordinators'
+
+class Tab2CoordinatorManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(team_tab=2, category='Club Coordinator')
+
+class Tab2Coordinator(Member):
+    objects = Tab2CoordinatorManager()
+    class Meta:
+        proxy = True
+        verbose_name = 'Current Tenure Coordinator'
+        verbose_name_plural = 'Current Tenure Coordinators'
 
 
 # ──────────────────────────────────────────

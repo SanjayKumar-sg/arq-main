@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import { 
   Code, Database, Shield, Smartphone, Palette, Video, Gamepad2, 
   Zap, Target, Users, Linkedin, ChevronLeft, ChevronRight,
-  BarChart3, Cloud, Camera, Calendar, Megaphone
+  BarChart3, Cloud, Camera, Calendar, Megaphone, BrainCircuit, Cpu
 } from 'lucide-react';
 
 export default function TeamPage() {
   const [executives, setExecutives] = useState([]);
+  const [coordinators, setCoordinators] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(1);
 
   // State for tracking current person in each domain
   const [domainIndex, setDomainIndex] = useState({
-    "Web Development": 0, "Data Analytics": 0, "Machine Learning": 0, "Data Security": 0,
-    "Cloud Computing": 0, "Design & Media": 0, "Cinematography": 0, "IoT & Hardware": 0,
+    "Web Development": 0, "Data Analytics": 0, "Machine Learning": 0,
+    "Data Engineering": 0, "Generative AI": 0,
+    "Data Security": 0, "Cloud Computing": 0, "Design & Media": 0,
+    "Cinematography": 0, "IoT & Hardware": 0,
     "Business Intelligence": 0, "Management": 0, "Event Management": 0, "Public Relations": 0, "None": 0
   });
 
@@ -25,6 +28,7 @@ export default function TeamPage() {
       .then(res => res.json())
       .then(data => {
         setExecutives(data.executives);
+        setCoordinators(data.coordinators || []);
         setTeamMembers(data.members);
         setLoading(false);
       })
@@ -38,6 +42,8 @@ export default function TeamPage() {
     "Web Development": { title: "Web Development", icon: Code, color: "#3b82f6" },
     "Data Analytics": { title: "Data Analytics", icon: Database, color: "#10b981" },
     "Machine Learning": { title: "Machine Learning", icon: Target, color: "#f97316" },
+    "Data Engineering": { title: "Data Engineering", icon: Cpu, color: "#0ea5e9" },
+    "Generative AI": { title: "Generative AI", icon: BrainCircuit, color: "#d946ef" },
     "Data Security": { title: "Data Security", icon: Shield, color: "#ef4444" },
     "Cloud Computing": { title: "Cloud Computing", icon: Cloud, color: "#06b6d4" },
     "Design & Media": { title: "Design & Media", icon: Palette, color: "#f59e0b" },
@@ -231,6 +237,21 @@ export default function TeamPage() {
           margin-bottom: 8rem;
           animation: fadeIn 1.5s ease-out;
           position: relative;
+        }
+
+        .coordinators-section {
+          margin-bottom: 8rem;
+          animation: fadeIn 1.5s ease-out;
+          position: relative;
+        }
+
+        .coordinators-flow {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 3rem;
+          justify-content: center;
+          max-width: 1100px;
+          margin: 0 auto;
         }
 
         .section-title {
@@ -741,6 +762,38 @@ export default function TeamPage() {
               ))}
             </div>
           </div>
+
+          {/* Club Coordinators Section */}
+          {coordinators.filter(c => c.team_tab === activeTab + 1).length > 0 && (
+            <div className="coordinators-section">
+              <h2 className="section-title">Club Coordinators</h2>
+              <div className="coordinators-flow">
+                {coordinators.filter(c => c.team_tab === activeTab + 1).map((coordinator, index) => (
+                  <div key={index} className="executive-member">
+                    <div className="member-profile">
+                      <a
+                        href={coordinator.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="linkedin-btn"
+                      >
+                        <Linkedin />
+                      </a>
+                      <img
+                        src={coordinator.image && coordinator.image.startsWith('http') ? coordinator.image : (coordinator.image ? `${API_URL}${coordinator.image}` : '')}
+                        alt={coordinator.name}
+                        className="member-image"
+                      />
+                    </div>
+                    <div className="member-info">
+                      <h3 className="member-name">{coordinator.name}</h3>
+                      <p className="member-role">{coordinator.position}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Domain Teams Section - Organic Grid */}
           <div className="domains-section">

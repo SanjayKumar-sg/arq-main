@@ -19,7 +19,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('arq/admin/', admin.site.urls),
 
     # ── Home page ──────────────────────────
     path('api/our-story/', get_our_story, name='get_our_story'),

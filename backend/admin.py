@@ -7,6 +7,7 @@ from .models import (
     Events, UpcomingEvent, SuccessStory,
     # Team
     Member, Tab1Member, Tab2Member,
+    Tab1Coordinator, Tab2Coordinator,
     # Gallery
     GalleryEvent, GalleryImage,
     # Services
@@ -63,6 +64,30 @@ class Tab2MemberAdmin(ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
+class Tab1CoordinatorAdmin(ModelAdmin):
+    list_display = ('name', 'position', 'order')
+    list_filter = ('position',)
+    search_fields = ('name',)
+    exclude = ('team_tab', 'category', 'domain', 'role')
+
+    def save_model(self, request, obj, form, change):
+        obj.team_tab = 1
+        obj.category = 'Club Coordinator'
+        super().save_model(request, obj, form, change)
+
+
+class Tab2CoordinatorAdmin(ModelAdmin):
+    list_display = ('name', 'position', 'order')
+    list_filter = ('position',)
+    search_fields = ('name',)
+    exclude = ('team_tab', 'category', 'domain', 'role')
+
+    def save_model(self, request, obj, form, change):
+        obj.team_tab = 2
+        obj.category = 'Club Coordinator'
+        super().save_model(request, obj, form, change)
+
+
 # ── GALLERY PAGE ───────────────────────────
 class GalleryImageInline(TabularInline):
     model = GalleryImage
@@ -92,6 +117,8 @@ admin.site.register(SuccessStory, SuccessStoryAdmin)
 # Team
 admin.site.register(Tab1Member, Tab1MemberAdmin)
 admin.site.register(Tab2Member, Tab2MemberAdmin)
+admin.site.register(Tab1Coordinator, Tab1CoordinatorAdmin)
+admin.site.register(Tab2Coordinator, Tab2CoordinatorAdmin)
 
 # Gallery
 admin.site.register(GalleryEvent, GalleryEventAdmin)

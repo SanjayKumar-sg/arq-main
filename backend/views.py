@@ -60,11 +60,14 @@ def get_success_stories(request):
 @api_view(['GET'])
 def get_team(request):
     executives = Member.objects.filter(category='Executive').order_by('order')
+    coordinators = Member.objects.filter(category='Club Coordinator').order_by('order')
     members = Member.objects.filter(category='Team Member').order_by('order')
     exec_serializer = MemberSerializer(executives, many=True)
+    coord_serializer = MemberSerializer(coordinators, many=True)
     member_serializer = MemberSerializer(members, many=True)
     return Response({
         "executives": exec_serializer.data,
+        "coordinators": coord_serializer.data,
         "members": member_serializer.data
     })
 
